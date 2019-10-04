@@ -7,9 +7,9 @@ order by rankid
 select count(distinct(artist_y))
 from billboardhot100
 ;
-select artist_x, count(*)
-from billboardhot100
-group by artist_x
+select Artist, count(*)
+from billboardhot100songs
+group by artist
 order by count(*) desc
 ;
 select artist_x, count(*)
@@ -30,6 +30,5 @@ order by rankid
 --4. Top words from song titles?
 
 --Things to fix--
---1. Get Back - Change to just The Beatles
---2. Ramblin' Gamblin' Man" change to "Bob Seger"
+
 

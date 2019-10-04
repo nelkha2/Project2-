@@ -11,6 +11,7 @@ create table if not exists billboardhot100
 	artist_y varchar(128),
 	lyrics text,
 	source integer,
+	lyricstatus bit,
 	geniuslyrics text
 );
 
