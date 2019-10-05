@@ -1,18 +1,16 @@
-create table if not exists billboardhot100
+create table if not exists billboardhot100withlyrics
 (
 	rankid integer not null
-		constraint billboardhot100_pk
+		constraint billboardhot100withlyrics_pk
 			primary key,
 	rank integer,
-	song_x varchar(128),
-	artist_x varchar(128),
+	artist varchar(128),
+    song varchar(128),
 	year integer,
-	song_y varchar(128),
-	artist_y varchar(128),
-	lyrics text,
-	source float,
-	lyricstatus bit,
-	geniuslyrics text
+    geniuslyrics text,
+    artist_primary varchar(128),
+    decade varchar(20),
+    wordcount int
 );
 
 create table if not exists billboardhot100songs
