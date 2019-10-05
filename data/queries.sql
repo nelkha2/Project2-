@@ -13,14 +13,13 @@ from billboardhot100withlyrics
 group by artist
 order by count(distinct song) desc
 ;
-select artist, count(*)
+select rankid, artist, song, wordcount, geniuslyrics
 from billboardhot100withlyrics
-group by artist
-order by count(*) desc
+order by wordcount desc
 ;
 select *
 from billboardhot100withlyrics
-where geniuslyrics is NULL
+where geniuslyrics is null
 order by rankid
 ;
 select count(*)
@@ -30,6 +29,7 @@ where artist like '%featuring%';
 update billboardhot100withlyrics
 SET song = REPLACE(song,'"', '')
 where rankid >= 301 and rankid < 400
+;
 
 --------Ideas---------
 --1. Most words
@@ -50,8 +50,25 @@ set rankid = rankid - 9500
 ;
 select *
 from billboardhot100withlyrics
-where rankid = 362
+where geniuslyrics IS NULL or geniuslyrics = ''
 ;
 update billboardhot100withlyrics
 set geniuslyrics = '[Instrumental]'
 where lower(geniuslyrics) = 'instrumental'
+;
+update billboardhot100withlyrics
+set decade = '2010''s'
+where year >= 2010
+and year < 2020
+;
+select left(artist, POSITION(' featuring' IN artist)), artist
+from billboardhot100withlyrics
+where artist like '%featuring%';
+;
+update billboardhot100withlyrics
+set artist_primary = left(artist, POSITION(' featuring' IN artist))
+where artist like '% featuring%';
+;
+update billboardhot100withlyrics
+set wordcount = 0
+;
