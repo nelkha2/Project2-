@@ -17,7 +17,7 @@ select rankid, artist, song, wordcount, geniuslyrics
 from billboardhot100withlyrics
 order by wordcount desc
 ;
-select *
+select rankid, rank, artist_primary, song, year
 from billboardhot100withlyrics
 where geniuslyrics is null
 order by rankid
@@ -61,14 +61,19 @@ set decade = '2010''s'
 where year >= 2010
 and year < 2020
 ;
-select left(artist, POSITION(' featuring' IN artist)), artist
+select ltrim(left(artist, POSITION('featuring' IN artist)-1)) as "artist_primary", artist
 from billboardhot100withlyrics
 where artist like '%featuring%';
 ;
 update billboardhot100withlyrics
-set artist_primary = left(artist, POSITION(' featuring' IN artist))
-where artist like '% featuring%';
+set artist_primary = ltrim(left(artist, POSITION('featuring' IN artist)-1))
+where artist like '%featuring%';
 ;
-update billboardhot100withlyrics
-set wordcount = 0
+select artist_primary, sum(wordcount), round(avg(wordcount),0)
+from billboardhot100withlyrics
+group by artist_primary
+order by sum(wordcount) desc
 ;
+select artist_primary, song, year, geniuslyrics, wordcount
+from billboardhot100withlyrics
+where artist_primary = 'Madonna'
