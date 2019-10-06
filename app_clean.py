@@ -25,11 +25,14 @@ Base.prepare(db.engine, reflect=True)
 #Save references to each table 
 HotOneHundred = Base.classes.billboardhotsongs
 
+#Engine
+engine = create_engine('postgresql://postgres:Keefac85?@localhost/Project_2')
+
 @app.route("/")
 def index():
     """Return the homepage."""
-    # return render_template("index.html")
-    return "Hello"
+    return render_template("index.html")
+    # return "Hello"
 
 # Deploy data as json 
 @app.route("/billboard/<rankid>")
@@ -58,7 +61,25 @@ def billboardYearEnd(rankid):
         rankid_metadata["wordcount"] = result[7]
     print(rankid_metadata)
     return jsonify(rankid_metadata)
-   
+
+@app.route("/Mosthits")
+def billboard():
+    top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhotsongs group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+    most_hits_json = [{i[0]: i[1]} for i in top_results]
+    return jsonify(most_hits_json)
+
+@app.route("/decades")
+def decades():
+    # List of decades 
+    # music_decades = engine.execute(f'select decades, from billboardhotsongs').fetchall()
+    # data_decades = [{i[0]: length.music_decades} for i in music_decades]
+    # return jsonify(data_decades)
+
+    # Sql query via Pandas
+    stmt = db.session.query(HotOneHundred).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+
+    return jsonify(list(df.columns)[6:])   
 
 if __name__ == "__main__":
     app.run()
