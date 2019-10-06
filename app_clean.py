@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 # Connecting to Postgres (//<username:password>@localhost/<local DB name>)
 # app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///data/data.sqlite'
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:Keefac85?@localhost/Project_2'
+app.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{u}:{p}@ec2-107-21-120-104.compute-1.amazonaws.com:5432/d6svjqnlm9q76b'
 db = SQLAlchemy(app)
 
 #Reflect existing db into model 
@@ -23,10 +23,10 @@ Base = automap_base()
 Base.prepare(db.engine, reflect=True)
 
 #Save references to each table 
-HotOneHundred = Base.classes.billboardhotsongs
+HotOneHundred = Base.classes.billboardhot100withlyrics
 
 #Engine
-engine = create_engine('postgresql://postgres:Keefac85?@localhost/Project_2')
+engine = create_engine(f'postgresql://{u}:{p}@ec2-107-21-120-104.compute-1.amazonaws.com:5432/d6svjqnlm9q76b')
 
 @app.route("/")
 def index():
@@ -62,9 +62,9 @@ def billboardYearEnd(rankid):
     print(rankid_metadata)
     return jsonify(rankid_metadata)
 
-@app.route("/Mosthits")
+@app.route("/mosthits")
 def billboard():
-    top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhotsongs group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+    top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
     most_hits_json = [{i[0]: i[1]} for i in top_results]
     return jsonify(most_hits_json)
 
