@@ -104,6 +104,7 @@ order by decade
 ;
 select artist_primary, count(distinct song)
 from billboardhot100withlyrics
+where explicit = true
 group by artist_primary
 order by count(distinct song) desc
 LIMIT 25
