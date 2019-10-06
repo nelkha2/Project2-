@@ -34,6 +34,12 @@ def index():
     return render_template("index.html")
     # return "Hello"
 
+@app.route("/about")
+def about():
+    """Return the homepage."""
+    return render_template("about.html")
+    # return "Hello"
+
 # Deploy data as json 
 @app.route("/billboard/<rankid>")
 def billboardYearEnd(rankid):
@@ -62,7 +68,7 @@ def billboardYearEnd(rankid):
     print(rankid_metadata)
     return jsonify(rankid_metadata)
 
-@app.route("/mosthits")
+@app.route("/chart")
 def billboard():
     top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
     most_hits_json = [{i[0]: i[1]} for i in top_results]
