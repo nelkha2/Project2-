@@ -2,7 +2,7 @@
   var url = `/topartists-data/${timeFrame}`;
   var xdata = [];
   var ydata = [];
-  var listofTimeFrames = ["All Time", "1960's", "1970's", "1980's", "1990's", "2000's", "2010's"]
+  var listofTimeFrames = ["All Time", "1960`s", "1970`s", "1980`s", "1990`s", "2000`s", "2010`s"]
   
 
   d3.json(url).then(function(response) {

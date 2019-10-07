@@ -139,6 +139,10 @@ from billboardhot100withlyrics
 ;
 select decade, count(*)
 from billboardhot100withlyrics
-where explicit = true
+where decade = '1960''s'
 group by decade
 order by decade
+;
+update billboardhot100withlyrics
+set decade = '2010`s'
+where decade = '2010''s'

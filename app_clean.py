@@ -87,7 +87,7 @@ def topartistsdata(timeframe):
     if timeframe == 'All Time':
         top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
     else:
-        top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = {timeframe} group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+        top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = '{timeframe}' group by artist_primary order by count(distinct song) desc LIMIT 25").fetchall()
     most_hits_json = [{i[0]: i[1]} for i in top_results]
     return jsonify(most_hits_json)
 
