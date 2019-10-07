@@ -84,8 +84,8 @@ def billboardYearEnd(artist):
 
 @app.route("/top-artists")
 def topartists():
-    """Return the homepage."""
-    return render_template("top-artists.html")   
+    """Return the homeptop artists page."""
+    return render_template("top-artists.html")    
 
 @app.route("/topartists-data/<timeframe>")
 def topartistsdata(timeframe):
@@ -96,6 +96,20 @@ def topartistsdata(timeframe):
         top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = '{timeframe}' group by artist_primary order by count(distinct song) desc LIMIT 25").fetchall()
     most_hits_json = [{i[0]: i[1]} for i in top_results]
     return jsonify(most_hits_json)
+
+@app.route("/lyrics")
+def lyrics():
+    """Return the lyrics page."""
+    return render_template("lyrics.html")
+
+@app.route("/lyrics-data")
+def lyricsdata(timeframe):
+    if timeframe == 'All Time':
+        top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+    else:
+        top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = '{timeframe}' group by artist_primary order by count(distinct song) desc LIMIT 25").fetchall()
+    most_hits_json = [{i[0]: i[1]} for i in top_results]
+    return jsonify(most_word_json)      
 
 
 @app.route("/decades")
