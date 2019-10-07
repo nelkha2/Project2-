@@ -41,43 +41,56 @@ def about():
     # return "Hello"
 
 # Deploy data as json 
-@app.route("/billboard/<rankid>")
-def billboardYearEnd(rankid):
-    sel =[
-        HotOneHundred.rankid,
-        HotOneHundred.rank,
-        HotOneHundred.artist,
-        HotOneHundred.song,
-        HotOneHundred.geniuslyrics,
-        HotOneHundred.artist_primary,
-        HotOneHundred.decade,
-        HotOneHundred.wordcount,
-    ]
-    results = db.session.query(*sel).filter(HotOneHundred.rankid == rankid).all()
+@app.route("/search/<artist>")
+def billboardYearEnd(artist):
+    # sel =[
+    #     HotOneHundred.rankid,
+    #     HotOneHundred.rank,
+    #     HotOneHundred.artist,
+    #     HotOneHundred.song,
+    #     HotOneHundred.artist_primary,
+    #     HotOneHundred.decade,
+    #     HotOneHundred.wordcount,
+    #     HotOneHundred.geniuslyrics,
+    # ]
+    
+    #results = db.session.query(*sel).filter(HotOneHundred.artist == artist).all()
+    artist_results = engine.execute(f"select rankid, rank, artist, song, artist_primary, decade, wordcount, geniuslyrics from billboardhot100withlyrics where artist_primary = '{artist}' order by rankid").fetchall()
 
-    rankid_metadata ={}
-    for result in results:
-        rankid_metadata["rankid"] = result[0]
-        rankid_metadata["rank"] = result[1]
-        rankid_metadata["artist"] = result[2]
-        rankid_metadata["song"] = result[3]
-        rankid_metadata["geniuslyrics"] = result[4]
-        rankid_metadata["artist_primary"] = result[5]
-        rankid_metadata["decade"] = result[6]
-        rankid_metadata["wordcount"] = result[7]
-    print(rankid_metadata)
-    return jsonify(rankid_metadata)
+    print(artist_results)
+
+    artist_metadata = []
+    for result in sorted(artist_results):
+        new_result = { 'rankid': result[0], 'rank': result[1], 'artist': result[2], 'song': result[3], 'artist_primary': result[4], 'decade': result[5], 'wordcount': result[6], 'geniuslyrics': result[7] }
+        artist_metadata.append(new_result)
+        # artist_metadata.append({'rankid' : result[0]})
+        # artist_metadata.append({"rank" : result[1]} )
+        # artist_metadata.append({"artist" : result[2]} )
+        # artist_metadata.append({"song" : result[3]} )
+        # artist_metadata.append({"geniuslyrics" : result[4]} )
+        # artist_metadata.append({"artist_primary" : result[5]} )
+        # artist_metadata.append({"decade" : result[6]} )
+        # artist_metadata.append({"wordcount" : result[7]} )
+    
+    #print(artist_metadata)
+    
+    return jsonify(artist_metadata)
 
 @app.route("/top-artists")
 def topartists():
     """Return the homepage."""
     return render_template("top-artists.html")   
 
-@app.route("/topartists-data")
-def topartistsdata():
-    top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+@app.route("/topartists-data/<timeframe>")
+def topartistsdata(timeframe):
+    print(timeframe)
+    if timeframe == 'All Time':
+        top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+    else:
+        top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = {timeframe} group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
     most_hits_json = [{i[0]: i[1]} for i in top_results]
     return jsonify(most_hits_json)
+
 
 @app.route("/decades")
 def decades():
