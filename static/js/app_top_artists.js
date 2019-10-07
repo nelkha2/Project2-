@@ -1,4 +1,3 @@
-  var timeFrame = 'All Time'
   var url = `/topartists-data/${timeFrame}`;
   var xdata = [];
   var ydata = [];
@@ -17,7 +16,7 @@
         }
     };
 
-    // Default Country Data
+    // Default Data
     setBarChart('All Time');
 
     function setBarChart(chosenTimeFrame) {
