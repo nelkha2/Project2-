@@ -40,6 +40,12 @@ def about():
     return render_template("about.html")
     # return "Hello"
 
+@app.route("/search")
+def search():
+    """Return the search page."""
+    return render_template("search.html")
+    # return "Hello"    
+
 # Deploy data as json 
 @app.route("/search/<artist>")
 def billboardYearEnd(artist):
