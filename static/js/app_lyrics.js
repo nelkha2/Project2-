@@ -9,7 +9,7 @@ function setVerboseBarChart(chosenVerboseTimeFrame) {
       var yVerboseData = [];
       d3.json(verboseUrl).then(function(verboseResponse) {
           var mostVerboseArtists = verboseResponse;
-          console.log(mostVerboseArtists)
+          //console.log(mostVerboseArtists)
           
           for (var i = 0, l = mostVerboseArtists.length; i < l; i++) {
             xVerboseData.push(Object.keys(mostVerboseArtists[i])[0])
@@ -17,7 +17,7 @@ function setVerboseBarChart(chosenVerboseTimeFrame) {
           }
       
       var verboseLayout = {
-          title: 'Most Verbose',
+          title: 'Most Verbose Artists',
       };
 
       var verboseData = [
@@ -32,9 +32,12 @@ function setVerboseBarChart(chosenVerboseTimeFrame) {
 });
   }
 
-var innerContainer = document.querySelector('[data-num="0"'),
+var innerContainer = document.getElementById('verboseBar'),
       plotEl = innerContainer.querySelector('.verbosePlot'),
       verboseTimeFrameSelector = innerContainer.querySelector('.verbosetimeframedata');
+      // console.log(innerContainer);
+      // console.log(plotEl);
+      // console.log(verboseTimeFrameSelector);
 
   function assignOptions(textArray, selector) {
       for (var i = 0; i < textArray.length;  i++) {

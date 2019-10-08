@@ -9,7 +9,7 @@ function setobsceneBarChart(chosenobsceneTimeFrame) {
       var yobsceneData = [];
       d3.json(obsceneUrl).then(function(obsceneResponse) {
           var mostobsceneArtists = obsceneResponse;
-          console.log(mostobsceneArtists)
+          //console.log(mostobsceneArtists)
           
           for (var i = 0, l = mostobsceneArtists.length; i < l; i++) {
             xobsceneData.push(Object.keys(mostobsceneArtists[i])[0])
@@ -32,22 +32,25 @@ function setobsceneBarChart(chosenobsceneTimeFrame) {
 });
   }
 
-var innerObscsneContainer = document.querySelector('[data-num="1"'),
-      plotE2 = innerObscsneContainer.querySelector('.obscenePlot'),
-      obsceneTimeFrameSelector = innerContainer.querySelector('.obscenetimeframedata');
+  var innerContainer = document.getElementById('obsceneBar'),
+  plotEl = innerContainer.querySelector('.obscenePlot'),
+  obsceneTimeFrameSelector = innerContainer.querySelector('.obscenetimeframedata');
+  // console.log(innerContainer);
+  // console.log(plotEl);
+  // console.log(obsceneTimeFrameSelector);
 
-      function assignOptions(textArray, selector) {
-        for (var i = 0; i < textArray.length;  i++) {
-            var currentObsceneOption = document.createElement('option');
-            currentObsceneOption.text = textArray[i];
-            selector.appendChild(currentObsceneOption);
-        }
-    }
-
-  assignOptions(listofobsceneTimeFrames, obsceneTimeFrameSelector);
-
-  function updateobsceneTimeFrame(){
-    setobsceneBarChart(obsceneTimeFrameSelector.value);
+function assignOptions(textArray, selector) {
+  for (var i = 0; i < textArray.length;  i++) {
+      var currentOption = document.createElement('option');
+      currentOption.text = textArray[i];
+      selector.appendChild(currentOption);
   }
+}
 
-  obsceneTimeFrameSelector.addEventListener('change', updateobsceneTimeFrame, false);
+assignOptions(listofobsceneTimeFrames, obsceneTimeFrameSelector);
+
+function updateobsceneTimeFrame(){
+setobsceneBarChart(obsceneTimeFrameSelector.value);
+}
+
+obsceneTimeFrameSelector.addEventListener('change', updateobsceneTimeFrame, false);
