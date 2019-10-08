@@ -97,6 +97,13 @@ def topartistsdata(timeframe):
     most_hits_json = [{i[0]: i[1]} for i in top_results]
     return jsonify(most_hits_json)
 
+@app.route("/yearlyhits-data/<timeframe>")
+def yearlyhitsdata(timeframe):
+    print(timeframe)
+    top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where year = {timeframe} group by artist_primary having count(distinct song) > 1 order by count(distinct song) desc LIMIT 10").fetchall()
+    most_hits_json = [{i[0]: i[1]} for i in top_results]
+    return jsonify(most_hits_json)    
+
 @app.route("/lyrics")
 def lyrics():
     """Return the lyrics page."""

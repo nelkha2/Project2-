@@ -62,7 +62,27 @@
             </div>
     </div>
     </div>
+    <div class="spacer"></div>    
+    <hr class="spacer">  
+    <div class="spacer"></div>
+    <div class="row">
+        <div class="col-md-12" align="center">
+            <div class="showcase__section" id="YearlyHitsPie">
+                <div class="spacer --small"></div>
+                    <div id="piecharts">
+                        <div class="piechart">
+                        <div class="YearlyHitsPlot" id="most-YearlyHits-chart"></div>
+                            <div class="control-row">
+                                Time Frame: <select class="YearlyHitstimeframedata">
+                                </select>
+                            </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>    
     </div>
   <script src="{{ url_for('static', filename='js/app_top_artists.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app_yearly_hits.js') }}"></script>  
 </body>
 </html>

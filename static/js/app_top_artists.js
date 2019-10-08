@@ -9,7 +9,7 @@
         var ydata = [];
         d3.json(url).then(function(response) {
             var allTimeTopArtists = response;
-            console.log(allTimeTopArtists)
+            //console.log(allTimeTopArtists)
             
             for (var i = 0, l = allTimeTopArtists.length; i < l; i++) {
                 xdata.push(Object.keys(allTimeTopArtists[i])[0])
