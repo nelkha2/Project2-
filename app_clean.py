@@ -102,7 +102,7 @@ def yearlyhitsdata(timeframe):
     print(timeframe)
     top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where year = {timeframe} group by artist_primary having count(distinct song) > 1 order by count(distinct song) desc LIMIT 10").fetchall()
     most_hits_json = [{i[0]: i[1]} for i in top_results]
-    return jsonify(most_hits_json)    
+    return jsonify(most_hits_json)
 
 @app.route("/lyrics")
 def lyrics():
@@ -127,7 +127,14 @@ def topoffensivedata(timeframe):
     else:
         top_results = engine.execute(f"select artist_primary, round(avg(explicit_word_count),0) from billboardhot100withlyrics where decade = '{timeframe}' and explicit_word_count is not null group by artist_primary having count(artist_primary) > 1 order by avg(explicit_word_count) desc LIMIT 25").fetchall()
     most_hits_json = [{i[0]: int(i[1])} for i in top_results]
-    return jsonify(most_hits_json)    
+    return jsonify(most_hits_json)   
+
+@app.route("/obsceneyearly-data")
+def obsceneyearly():
+    # print(timeframe)
+    top_results = engine.execute(f'select year, sum(explicit_word_count), round(avg(explicit_word_count),0) from billboardhot100withlyrics where explicit_word_count is not null group by year order by year').fetchall()
+    most_hits_json = [{i[0]: int(i[1])} for i in top_results]
+    return jsonify(most_hits_json)      
 
 
 @app.route("/decades")
