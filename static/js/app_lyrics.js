@@ -24,7 +24,10 @@ function setVerboseBarChart(chosenVerboseTimeFrame) {
           {
           x: xVerboseData,
           y: yVerboseData,
-          type: 'bar'
+          type: 'bar',
+          marker: {
+            color: 'rgb(142,124,195)'
+          }
           }
       ];
       

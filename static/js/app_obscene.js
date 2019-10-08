@@ -24,7 +24,10 @@ function setobsceneBarChart(chosenobsceneTimeFrame) {
           {
           x: xobsceneData,
           y: yobsceneData,
-          type: 'bar'
+          type: 'bar',
+          marker: {
+            color: 'rgb(189, 41, 15)'
+          }
           }
       ];
       
