@@ -156,12 +156,19 @@ SELECT rankid, artist_primary, song, wordcount
             and explicit = true
             ORDER BY rankid
 ;
-select *
-from billboardhot100withlyrics
-where artist_primary = 'Kid Cudi'
+update billboardhot100withlyrics
+set artist_primary = replace(artist_primary, ' ', '')
+where artist_primary like '% ';
 
-select artist_primary, round(avg(wordcount),0)
+select artist_primary, avg(wordcount), count(*)
 from billboardhot100withlyrics
 group by artist_primary
 having count(artist_primary) > 1
 order by avg(wordcount) desc LIMIT 25
+;
+select artist_primary, round(avg(explicit_word_count),0)
+from billboardhot100withlyrics
+where explicit_word_count is not null
+group by artist_primary
+having count(artist_primary) > 1
+order by avg(explicit_word_count) desc LIMIT 25

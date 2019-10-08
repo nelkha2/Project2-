@@ -1,40 +1,40 @@
-var chosenTimeFrame = 'All-Time'
-var listofTimeFrames = ["All-Time", "1960`s", "1970`s", "1980`s", "1990`s", "2000`s", "2010`s"]
-setBarChart('All-Time');
+var chosenVerboseTimeFrame = 'All-Time'
+var listofVerboseTimeFrames = ["All-Time", "1960`s", "1970`s", "1980`s", "1990`s", "2000`s", "2010`s"]
+setVerboseBarChart('All-Time');
 
 
-  function setBarChart(chosenTimeFrame) {
-      var url = `/lyrics-data/${chosenTimeFrame}`;
-      var xdata = [];
-      var ydata = [];
-      d3.json(url).then(function(response) {
-          var allTimeTopArtists = response;
-          console.log(allTimeTopArtists)
+function setVerboseBarChart(chosenVerboseTimeFrame) {
+      var verboseUrl = `/lyrics-data/${chosenVerboseTimeFrame}`;
+      var xVerboseData = [];
+      var yVerboseData = [];
+      d3.json(verboseUrl).then(function(verboseResponse) {
+          var mostVerboseArtists = verboseResponse;
+          console.log(mostVerboseArtists)
           
-          for (var i = 0, l = allTimeTopArtists.length; i < l; i++) {
-              xdata.push(Object.keys(allTimeTopArtists[i])[0])
-              ydata.push(Object.values(allTimeTopArtists[i])[0]);
+          for (var i = 0, l = mostVerboseArtists.length; i < l; i++) {
+            xVerboseData.push(Object.keys(mostVerboseArtists[i])[0])
+            yVerboseData.push(Object.values(mostVerboseArtists[i])[0]);
           }
       
-      var layout = {
+      var verboseLayout = {
           title: 'Most Verbose',
       };
 
-      var data = [
+      var verboseData = [
           {
-          x: xdata,
-          y: ydata,
+          x: xVerboseData,
+          y: yVerboseData,
           type: 'bar'
           }
       ];
       
-      Plotly.newPlot('top-artists-chart', data, layout);
+      Plotly.newPlot('most-verbose-chart', verboseData, verboseLayout);
 });
   }
 
-  var innerContainer = document.querySelector('[data-num="0"'),
-      plotEl = innerContainer.querySelector('.plot'),
-      timeFrameSelector = innerContainer.querySelector('.timeframedata');
+var innerContainer = document.querySelector('[data-num="0"'),
+      plotEl = innerContainer.querySelector('.verbosePlot'),
+      verboseTimeFrameSelector = innerContainer.querySelector('.verbosetimeframedata');
 
   function assignOptions(textArray, selector) {
       for (var i = 0; i < textArray.length;  i++) {
@@ -44,10 +44,10 @@ setBarChart('All-Time');
       }
   }
 
-  assignOptions(listofTimeFrames, timeFrameSelector);
+  assignOptions(listofVerboseTimeFrames, verboseTimeFrameSelector);
 
-  function updateTimeFrame(){
-      setBarChart(timeFrameSelector.value);
+  function updateVerboseTimeFrame(){
+    setVerboseBarChart(verboseTimeFrameSelector.value);
   }
 
-  timeFrameSelector.addEventListener('change', updateTimeFrame, false);
+  verboseTimeFrameSelector.addEventListener('change', updateVerboseTimeFrame, false);

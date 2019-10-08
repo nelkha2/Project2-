@@ -1,0 +1,53 @@
+var chosenobsceneTimeFrame = 'All-Time'
+var listofobsceneTimeFrames = ["All-Time", "1960`s", "1970`s", "1980`s", "1990`s", "2000`s", "2010`s"]
+setobsceneBarChart('All-Time');
+
+
+function setobsceneBarChart(chosenobsceneTimeFrame) {
+      var obsceneUrl = `/obscene-data/${chosenobsceneTimeFrame}`;
+      var xobsceneData = [];
+      var yobsceneData = [];
+      d3.json(obsceneUrl).then(function(obsceneResponse) {
+          var mostobsceneArtists = obsceneResponse;
+          console.log(mostobsceneArtists)
+          
+          for (var i = 0, l = mostobsceneArtists.length; i < l; i++) {
+            xobsceneData.push(Object.keys(mostobsceneArtists[i])[0])
+            yobsceneData.push(Object.values(mostobsceneArtists[i])[0]);
+          }
+      
+      var obsceneLayout = {
+          title: 'Most Obscene Artists',
+      };
+
+      var obsceneData = [
+          {
+          x: xobsceneData,
+          y: yobsceneData,
+          type: 'bar'
+          }
+      ];
+      
+      Plotly.newPlot('most-obscene-chart', obsceneData, obsceneLayout);
+});
+  }
+
+var innerObscsneContainer = document.querySelector('[data-num="1"'),
+      plotE2 = innerObscsneContainer.querySelector('.obscenePlot'),
+      obsceneTimeFrameSelector = innerContainer.querySelector('.obscenetimeframedata');
+
+      function assignOptions(textArray, selector) {
+        for (var i = 0; i < textArray.length;  i++) {
+            var currentObsceneOption = document.createElement('option');
+            currentObsceneOption.text = textArray[i];
+            selector.appendChild(currentObsceneOption);
+        }
+    }
+
+  assignOptions(listofobsceneTimeFrames, obsceneTimeFrameSelector);
+
+  function updateobsceneTimeFrame(){
+    setobsceneBarChart(obsceneTimeFrameSelector.value);
+  }
+
+  obsceneTimeFrameSelector.addEventListener('change', updateobsceneTimeFrame, false);
