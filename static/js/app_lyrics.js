@@ -17,7 +17,7 @@ function setVerboseBarChart(chosenVerboseTimeFrame) {
           }
       
       var verboseLayout = {
-          title: 'Most Verbose Artists',
+          title: 'Most Verbose Artists (Average Words Per Song)',
       };
 
       var verboseData = [

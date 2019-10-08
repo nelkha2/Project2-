@@ -17,7 +17,7 @@ function setYearlyHitsBarChart(chosenYearlyHitsTimeFrame) {
           }
       
           var YearlyHitsLayout = {
-            title: 'Top 4 Artists by Number of Hits in a Year',
+            title: 'Top 10 Artists by Number of Hits in a Year',
             height: 600,
             width: 800,
           };

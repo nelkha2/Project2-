@@ -134,7 +134,20 @@ def obsceneyearly():
     # print(timeframe)
     top_results = engine.execute(f'select year, sum(explicit_word_count), round(avg(explicit_word_count),0) from billboardhot100withlyrics where explicit_word_count is not null group by year order by year').fetchall()
     most_hits_json = [{i[0]: int(i[1])} for i in top_results]
-    return jsonify(most_hits_json)      
+    return jsonify(most_hits_json) 
+
+@app.route("/words-to-hits-data/<timeframe>")
+def wthdata(timeframe):
+    print(timeframe)
+    if timeframe == 'All-Time':
+        top_results = engine.execute(f'select artist_primary, round(avg(explicit_word_count),0), count(distinct song) from billboardhot100withlyrics where explicit_word_count is not null group by artist_primary having count(artist_primary) > 1 order by avg(explicit_word_count) desc LIMIT 25').fetchall()
+    else:
+        top_results = engine.execute(f"select artist_primary, round(avg(explicit_word_count),0), count(distinct song) from billboardhot100withlyrics where decade = '{timeframe}' and explicit_word_count is not null group by artist_primary having count(artist_primary) > 1 order by avg(explicit_word_count) desc LIMIT 25").fetchall()
+    
+    most_hits_json = dict((i[0], ((int(i[1]), int(i[2])))) for i in top_results)
+    #print(most_hits_json)
+
+    return most_hits_json, top_results
 
 
 @app.route("/decades")
