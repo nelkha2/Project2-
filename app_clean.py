@@ -222,7 +222,7 @@ def topartists():
 @app.route("/topartists-data/<timeframe>")
 def topartistsdata(timeframe):
     print(timeframe)
-    if timeframe == 'All Time':
+    if timeframe == 'All-Time':
         top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
     else:
         top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = '{timeframe}' group by artist_primary order by count(distinct song) desc LIMIT 25").fetchall()
