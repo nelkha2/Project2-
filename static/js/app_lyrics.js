@@ -4,6 +4,8 @@
   var ydata = [];
   var listofTimeFrames = ["All Time", "1960`s", "1970`s", "1980`s", "1990`s", "2000`s", "2010`s"]
   
+// Default Country Data
+setBarChart('All Time');
 
   d3.json(url).then(function(response) {
   
@@ -16,9 +18,6 @@
             ydata.push(Object.values(allTimeTopArtists[i])[0]);
         }
     };
-
-    // Default Country Data
-    setBarChart('All Time');
 
     function setBarChart(chosenTimeFrame) {
         getArtistData(chosenTimeFrame);
