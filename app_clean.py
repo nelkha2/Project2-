@@ -17,8 +17,12 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:Keefac85?@localho
 # app.config["SQLALCHEMY_DATABASE_URI"] = f'postgres://{u}:{p}@ec2-107-21-120-104.compute-1.amazonaws.com:5432/d6svjqnlm9q76b'
 =======
 # app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///data/data.sqlite'
+<<<<<<< HEAD
 app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:Keefac85?@localhost/Project_2'
 >>>>>>> Nader_new
+=======
+app.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{u}:{p}@ec2-107-21-120-104.compute-1.amazonaws.com:5432/d6svjqnlm9q76b'
+>>>>>>> 0b7845f211e5d9badcf5c30cc40d2f7fd7cc6ce5
 db = SQLAlchemy(app)
 
 #Reflect existing db into model 
@@ -28,6 +32,7 @@ Base = automap_base()
 Base.prepare(db.engine, reflect=True)
 
 #Save references to each table 
+<<<<<<< HEAD
 <<<<<<< HEAD
 HotOneHundred = Base.classes.billboardhot100songs
 
@@ -63,6 +68,12 @@ HotOneHundred = Base.classes.billboardhotsongs
 #Engine
 engine = create_engine('postgresql://postgres:Keefac85?@localhost/Project_2')
 >>>>>>> Nader_new
+=======
+HotOneHundred = Base.classes.billboardhot100withlyrics
+
+#Engine
+engine = create_engine(f'postgresql://{u}:{p}@ec2-107-21-120-104.compute-1.amazonaws.com:5432/d6svjqnlm9q76b')
+>>>>>>> 0b7845f211e5d9badcf5c30cc40d2f7fd7cc6ce5
 
 @app.route("/")
 def index():
@@ -75,7 +86,20 @@ def index():
     # return "Hello"
 >>>>>>> Nader_new
 
+@app.route("/about")
+def about():
+    """Return the homepage."""
+    return render_template("about.html")
+    # return "Hello"
+
+@app.route("/search")
+def search():
+    """Return the search page."""
+    return render_template("search.html")
+    # return "Hello"    
+
 # Deploy data as json 
+<<<<<<< HEAD
 @app.route("/billboard/<rankid>")
 def billboardYearEnd(rankid):
     sel =[
@@ -154,8 +178,72 @@ if __name__ == "__main__":
 @app.route("/Mosthits")
 def billboard():
     top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhotsongs group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+=======
+@app.route("/search/<artist>")
+def billboardYearEnd(artist):
+    # sel =[
+    #     HotOneHundred.rankid,
+    #     HotOneHundred.rank,
+    #     HotOneHundred.artist,
+    #     HotOneHundred.song,
+    #     HotOneHundred.artist_primary,
+    #     HotOneHundred.decade,
+    #     HotOneHundred.wordcount,
+    #     HotOneHundred.geniuslyrics,
+    # ]
+    
+    #results = db.session.query(*sel).filter(HotOneHundred.artist == artist).all()
+    artist_results = engine.execute(f"select rankid, rank, artist, song, artist_primary, decade, wordcount, geniuslyrics from billboardhot100withlyrics where artist_primary = '{artist}' order by rankid").fetchall()
+
+    print(artist_results)
+
+    artist_metadata = []
+    for result in sorted(artist_results):
+        new_result = { 'rankid': result[0], 'rank': result[1], 'artist': result[2], 'song': result[3], 'artist_primary': result[4], 'decade': result[5], 'wordcount': result[6], 'geniuslyrics': result[7] }
+        artist_metadata.append(new_result)
+        # artist_metadata.append({'rankid' : result[0]})
+        # artist_metadata.append({"rank" : result[1]} )
+        # artist_metadata.append({"artist" : result[2]} )
+        # artist_metadata.append({"song" : result[3]} )
+        # artist_metadata.append({"geniuslyrics" : result[4]} )
+        # artist_metadata.append({"artist_primary" : result[5]} )
+        # artist_metadata.append({"decade" : result[6]} )
+        # artist_metadata.append({"wordcount" : result[7]} )
+    
+    #print(artist_metadata)
+    
+    return jsonify(artist_metadata)
+
+@app.route("/top-artists")
+def topartists():
+    """Return the homeptop artists page."""
+    return render_template("top-artists.html")    
+
+@app.route("/topartists-data/<timeframe>")
+def topartistsdata(timeframe):
+    print(timeframe)
+    if timeframe == 'All Time':
+        top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+    else:
+        top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = '{timeframe}' group by artist_primary order by count(distinct song) desc LIMIT 25").fetchall()
+>>>>>>> 0b7845f211e5d9badcf5c30cc40d2f7fd7cc6ce5
     most_hits_json = [{i[0]: i[1]} for i in top_results]
     return jsonify(most_hits_json)
+
+@app.route("/lyrics")
+def lyrics():
+    """Return the lyrics page."""
+    return render_template("lyrics.html")
+
+@app.route("/lyrics-data")
+def lyricsdata(timeframe):
+    if timeframe == 'All Time':
+        top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+    else:
+        top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = '{timeframe}' group by artist_primary order by count(distinct song) desc LIMIT 25").fetchall()
+    most_hits_json = [{i[0]: i[1]} for i in top_results]
+    return jsonify(most_word_json)      
+
 
 @app.route("/decades")
 def decades():
