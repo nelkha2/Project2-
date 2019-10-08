@@ -61,13 +61,13 @@ def billboardYearEnd(artist):
     # ]
     
     #results = db.session.query(*sel).filter(HotOneHundred.artist == artist).all()
-    artist_results = engine.execute(f"select rankid, rank, artist, song, artist_primary, decade, wordcount, geniuslyrics from billboardhot100withlyrics where artist_primary = '{artist}' order by rankid").fetchall()
+    artist_results = engine.execute(f"select rankid, rank, artist, song, artist_primary, decade, wordcount, geniuslyrics, year from billboardhot100withlyrics where artist_primary = '{artist}' order by rankid").fetchall()
 
     print(artist_results)
 
     artist_metadata = []
     for result in sorted(artist_results):
-        new_result = { 'rankid': result[0], 'rank': result[1], 'artist': result[2], 'song': result[3], 'artist_primary': result[4], 'decade': result[5], 'wordcount': result[6], 'geniuslyrics': result[7] }
+        new_result = { 'rankid': result[0], 'rank': result[1], 'artist': result[2], 'song': result[3], 'artist_primary': result[4], 'decade': result[5], 'wordcount': result[6], 'geniuslyrics': result[7] , 'year': result[8]}
         artist_metadata.append(new_result)
         # artist_metadata.append({'rankid' : result[0]})
         # artist_metadata.append({"rank" : result[1]} )
@@ -102,14 +102,15 @@ def lyrics():
     """Return the lyrics page."""
     return render_template("lyrics.html")
 
-@app.route("/lyrics-data")
-def lyricsdata(timeframe):
-    if timeframe == 'All Time':
-        top_results = engine.execute(f'select artist_primary, count(distinct song) from billboardhot100withlyrics group by artist_primary order by count(distinct song) desc LIMIT 25').fetchall()
+@app.route("/lyrics-data/<timeframe>")
+def topoffensivedata(timeframe):
+    print(timeframe)
+    if timeframe == 'All-Time':
+        top_results = engine.execute(f'select artist_primary, round(avg(wordcount),0) from billboardhot100withlyrics group by artist_primary order by avg(wordcount) desc LIMIT 25').fetchall()
     else:
-        top_results = engine.execute(f"select artist_primary, count(distinct song) from billboardhot100withlyrics where decade = '{timeframe}' group by artist_primary order by count(distinct song) desc LIMIT 25").fetchall()
-    most_hits_json = [{i[0]: i[1]} for i in top_results]
-    return jsonify(most_word_json)      
+        top_results = engine.execute(f"select artist_primary, round(avg(wordcount),0) from billboardhot100withlyrics where decade = '{timeframe}' group by artist_primary order by avg(wordcount) desc LIMIT 25").fetchall()
+    most_hits_json = [{i[0]: int(i[1])} for i in top_results]
+    return jsonify(most_hits_json)
 
 
 @app.route("/decades")

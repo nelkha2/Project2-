@@ -155,3 +155,13 @@ SELECT rankid, artist_primary, song, wordcount
             WHERE geniuslyrics is not null
             and explicit = true
             ORDER BY rankid
+;
+select *
+from billboardhot100withlyrics
+where artist_primary = 'Kid Cudi'
+
+select artist_primary, round(avg(wordcount),0)
+from billboardhot100withlyrics
+group by artist_primary
+having count(artist_primary) > 1
+order by avg(wordcount) desc LIMIT 25
