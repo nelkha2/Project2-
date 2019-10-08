@@ -47,6 +47,10 @@ body {
   width: 35px;
 }
 
+.spacer {
+  margin-top: 40px; /* define margin as you see fit */
+}
+
 /* Adding styles to the aside and filter form */
 /* .ufo-form {
   margin-top: 50px;

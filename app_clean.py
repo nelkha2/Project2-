@@ -34,10 +34,10 @@ def index():
     return render_template("index.html")
     # return "Hello"
 
-@app.route("/about")
+@app.route("/fun-facts")
 def about():
     """Return the homepage."""
-    return render_template("about.html")
+    return render_template("fun-facts.html")
     # return "Hello"
 
 @app.route("/search")
