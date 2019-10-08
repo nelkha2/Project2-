@@ -17,7 +17,7 @@ function setobsceneBarChart(chosenobsceneTimeFrame) {
           }
       
       var obsceneLayout = {
-          title: 'Most Obscene Artists',
+          title: 'Most Obscene Artists (Average Obscene Words Per Song)',
       };
 
       var obsceneData = [
